@@ -1,15 +1,3 @@
-// DIS SHIT IS WORKING ON 18.03.2018 !!!!
-// I DID IT !!!
-// PS. YOUR LEO
-// UPLOADING DIS CODE WITH ALL COMM'S TO SHOW U HOW HARD IT WAS :D
-// КОРОЧЕ ЩА ОБЪЯСНЮ ПО ГОВНОКОДУ ЧЕ КАК И ПОЧЕМУ
-// ИЗНАЧАЛЬНО ЭТА ХЕРЬ НЕ РАБОТАЛА ПОТОМУ ЧТО КРОМЕ ПОДКЛЮЧЕНИЯ ТОГО КЛАССА, НЕОБХОДИМО БЫЛО ПОДКЛЮЧИТЬ БИБЛИОТЕКИ ТОГО КЛАССА
-// ДА ЭТО ПОЛНЫЙ БРЕД, НО БЕЗ ЭТОГО В МОЕМ КЛАССЕ ПАРСИНГ РАБОТАЛ НЕКОРРЕКТНО
-// ЗАТЕМ В КЛАССЕ VOLERDMANA ПРИШЛОСЬ СДЕЛАТЬ ПЕРЕМЕННУЮ ТИПА STRING ПУБЛИЧНОЙ, ДАБЫ ОБРАЩАТЬСЯ К НЕЙ С ЛЮБОЙ ЗАЛУПЫ
-// ПО ИТОГУ НЕОБХОДИМЫЕ СТРОЧКИ ОБОЗНАЧУ В СЛЕД СТРОКЕ - 
-// 14,15,16,24,28
-// ТЕПЕРЬ ЖЕ Я ИЗМЕНЯЮ КЛАСС ВАЛЕРЫ ДАБЫ ОН СРАЗУ И ПАРСИЛ И КИДАЛ В ТАБЛИЦУ
-
 package JTableNewTest;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,23 +7,10 @@ public class ParsingDateIntoTable {
 	
 	ParsingDateIntoTable(){
 		VideoParser VP = new VideoParser();
-		String videoprice = VP.searchedPrice;
-		String stringtest = VP.test;
+		VP.VideoParse(null);
 		ProcParser PP = new ProcParser();
-		//String searchedProcPrice = PP.searchedProcPrice;
-	//	System.out.print(searchedProcPrice);
-	//	PP.ParseMethod(null);
 		PP.ProcParse(null);
-    	Video VideoTable = new Video();
-    	JD JDTable = new JD();
-    	OZU OZUTable = new OZU();
-    	Proc ProcTable = new Proc();
-    	Zvuk ZvukTable = new Zvuk();
-    	BlocPit BlocPitTable = new BlocPit();
-    	Korpusa KorpusaTable = new Korpusa();
-    	Mamka MamkaTable = new Mamka();
-    	System.out.print(videoprice);
-    	System.out.print(stringtest);
+
 	}
 
 	public static void main(String[] args) {
@@ -46,28 +21,8 @@ public class ParsingDateIntoTable {
             new ParsingDateIntoTable();
             }
         });
-		
-//		System.out.println(ProcTable.data);
-//		System.out.println(ZvukTable.data);
-	//	System.out.println(BlocPitTable.data);
-//		System.out.println(KorpusaTable.data);
-//		System.out.println(MamkaTable.data);
-				
+
 	}
 
 }
-
-//		System.out.println(VideoTable.jTabVideo.getHeaderValue());
-//		System.out.println(JDTable.data);
-//		VideoTable.jTabVideo.TableColumnModel columnModel =  VideoTable.jTabVideo.getColumnModel();
-//	System.out.println(OZUTable.data);
-//    	System.out.print(VP.);
-//		System.out.println( VideoTable.jTabVideo.getColumnCount());
-//	VideoTable.jTabVideo.add(null, new String[] {VP.getString() } );   // add new data to jTable
-//	System.out.println( ProcTable.jTabVideo.getColumnCount());
-//	System.out.println( ZvukTable.jTabVideo.getColumnCount());
-//	System.out.println( BlocPitTable.jTabVideo.getColumnCount());
-//	System.out.println( KorpusaTable.jTabVideo.getColumnCount());
-//	System.out.println( MamkaTable.jTabVideo.getColumnCount());
-//	System.out.println( JDTable.jTabVideo.getColumnCount());
-//	System.out.println( OZUTable.jTabVideo.getColumnCount());
+// Ес че я вообще не совсем понимаю Рамис мне там нахимичил с оверрайдами, методами и тд. Но он говорит так лучше, хз.
