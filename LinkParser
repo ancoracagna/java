@@ -1,0 +1,22 @@
+import java.io.IOException;
+
+import javax.lang.model.element.Element;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+public class Parser{
+	  
+    public static void main(String args[]) {
+        Document doc;
+        try {
+                        doc = Jsoup.connect("https://www.dns-shop.ru/catalog/17a899cd16404e77/processory/").get();
+						Elements Link = doc.select("div[class^='title']");
+                        for (org.jsoup.nodes.Element category : Link) {
+                            System.out.println("https://www.dns-shop.ru/" + category.select("a").attr("href") + "\n");
+                        }            
+                   } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
