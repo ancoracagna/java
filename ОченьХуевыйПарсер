@@ -1,0 +1,31 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import javax.lang.model.element.Element;
+
+import java.io.File;
+import java.io.FileWriter;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+public class Parser{
+	  
+	public static void main(String args[]) {
+        try {
+        	int page_number;
+        	Document Mamki;
+        	 File file = new File("C:\\Users\\user\\Desktop\\Mamki.txt");
+             FileWriter fr = null;
+             fr = new FileWriter(file);
+        	for(page_number = 1;page_number < 17;page_number ++ ) {
+        		Mamki = Jsoup.connect("https://www.dns-shop.ru/catalog/17a89a0416404e77/materinskie-platy/?p=" + page_number + "&i=1Э").get();
+        		Elements Link = Mamki.select("div[class^='title']");
+        		for (org.jsoup.nodes.Element category : Link) {
+        			fr.append("https://www.dns-shop.ru/" + category.select("a").attr("href") + "\n");
+        		} 
+        	}
+        	fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
