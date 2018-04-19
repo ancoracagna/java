@@ -1,0 +1,340 @@
+package application;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.xml.soap.Text;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
+import com.sun.glass.ui.Application;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class ControllerMainChat {
+	@FXML
+	private JFXButton Send;
+	@FXML
+	private JFXTextArea Memo;
+	@FXML
+	private JFXTextField TextEdit;
+	@FXML
+	private JFXTextField PriceEdit;
+	@FXML
+	private JFXButton RefreshPrice;
+	@FXML
+	private JFXButton Clear;
+	@FXML
+	private JFXButton Close;
+	int price = 0;
+ 	public int maxProc = 1;
+ 	public int maxVideo = 1;
+	public String linkVideo;
+	public String linkProc;;
+	public String linkMamka;
+	public int maxMamka = 1;
+	
+	// ВОЗМОЖНЫЕ КОМБИНАЦИИ
+	
+	@FXML
+    void onClickExit(ActionEvent event) { 
+		Stage stage = (Stage) Close.getScene().getWindow();
+		stage.close();
+	}
+	@FXML
+    void onClickClear(ActionEvent event) { 
+	Memo.clear();
+	}
+	@FXML
+    void onClickRefreshPrice(ActionEvent event) { 
+	String priceString;
+	priceString = PriceEdit.getText();
+	price = Integer.parseInt(priceString);
+	Send.setDisable(false);
+	}
+	Pattern p = Pattern.compile("игровой процессор");
+	Pattern p2 = Pattern.compile("для майнинга");
+	Pattern p3 = Pattern.compile("процессор");
+	Pattern p4 = Pattern.compile("игровая видеокарта");
+	Pattern p5 = Pattern.compile("видеокарта");
+	Pattern p6 = Pattern.compile("игровую видеокарту");   // Подкрутить и этот
+	Pattern p7 = Pattern.compile("офисный процессор");
+	Pattern p8 = Pattern.compile("игровой компьютер");
+	Pattern p9 = Pattern.compile("ссылки");
+	Pattern p10 = Pattern.compile("материнскую плату");
+	Pattern p11 = Pattern.compile("материнская плата");
+	// собери мне игровой пк до 31000 рублей. С возможным упором, если подороже начинаем с price/2-> i и reverse так же обратный
+ 	// upd: все паттерны подкручены
+	// добавить игровой компьютер, игровой монитор, офисный компьютер, недорогой компьютер
+	@FXML
+    void onClickSendMessage(ActionEvent event) { 
+	MyClass Connector = new MyClass();
+	Connection Conn=Connector.connect("ctlg");
+		Connector.connect("ctlg");
+
+	Memo.appendText("Leo: "+TextEdit.getText() + "\r\n");
+	Matcher m = p.matcher(TextEdit.getText());
+	Matcher m2 = p2.matcher(TextEdit.getText());
+	Matcher m3 = p3.matcher(TextEdit.getText());
+	Matcher m4 = p4.matcher(TextEdit.getText());
+	Matcher m5 = p5.matcher(TextEdit.getText());
+	Matcher m6 = p6.matcher(TextEdit.getText());
+	Matcher m7 = p7.matcher(TextEdit.getText());
+	Matcher m8 = p8.matcher(TextEdit.getText());
+	Matcher m9 = p9.matcher(TextEdit.getText());
+	Matcher m10 = p10.matcher(TextEdit.getText());
+	Matcher m11 = p11.matcher(TextEdit.getText());
+	
+	TextEdit.setText("");
+	m.find();
+ 	m2.find();
+ 	m3.find();
+ 	m4.find();
+ 	m5.find();
+ 	m6.find();
+ 	m7.find();
+ 	m8.find();
+ 	m9.find();
+ 	m10.find();
+ 	m11.find();
+ 	// for price = price to i=1 
+ 	//if (m3.find(0)) {
+ //		Memo.appendText("ChatBot: Какой именно процессор вы бы себе хотели? Возможно игровой?");
+ 		if (m.find(0)) { // игровой процессор
+ 	 		int num = 1;
+ 			Memo.appendText("ChatBot: Возможно вам подойдут эти товары: \r\n");
+ 	 		for (int i = 1; i<price;i++) {
+ 			String query = "SELECT * FROM catalog WHERE Type LIKE 'Игровой' AND Category LIKE 'Процессор' AND Price LIKE '"+i+"'";
+ 			Statement stmt;
+ 			try {
+ 				stmt = Conn.createStatement();
+ 				ResultSet rs = stmt.executeQuery(query);
+ 				while(rs.next()) {
+ 					linkProc = rs.getString("Link");
+ 					Memo.appendText(num +") " +rs.getString("Name") + " его цена: " + rs.getInt("Price") + "\r\n");
+ 					num++;
+ 				}
+ 			} catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 	 			}
+ 	 		}
+ 		if (m10.find(0)) { // мамка
+ 	 		int num = 1;
+ 			Memo.appendText("ChatBot: Возможно вам подойдут эти товары: \r\n");
+ 	 		for (int i = 1; i<price;i++) {
+ 			String query = "SELECT * FROM catalog WHERE Type LIKE 'Игровая' AND Category LIKE 'Материнская плата' AND Price LIKE '"+i+"'";
+ 			Statement stmt;
+ 			try {
+ 				stmt = Conn.createStatement();
+ 				ResultSet rs = stmt.executeQuery(query);
+ 				while(rs.next()) {
+ 					linkMamka = rs.getString("Link");
+ 					Memo.appendText(num +") " +rs.getString("Name") + " его цена: " + rs.getInt("Price") + "\r\n");
+ 					num++;
+ 				}
+ 			} catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 	 			}
+ 	 		}
+ 		
+ 		if (m7.find(0)) { //офисный процессор
+ 	 		int num = 1;
+ 	 		Memo.appendText("ChatBot: Возможно вам подойдут эти товары: \r\n");
+ 	 		for (int i = 1; i<price;i++) {
+ 			String query = "SELECT * FROM catalog WHERE Type LIKE 'Офисный' AND Category LIKE 'Процессор' AND Price LIKE '"+i+"'";
+ 			Statement stmt;
+ 			try {
+ 				stmt = Conn.createStatement();
+ 				ResultSet rs = stmt.executeQuery(query);
+ 				while(rs.next()) {
+ 					Memo.appendText(num +") " +rs.getString("Name") + " его цена: " + rs.getInt("Price") + "\r\n");
+ 					linkProc = rs.getString("Link");
+ 					num++;
+ 				}
+ 			} catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 	 			}
+ 	 		}
+ 	 		
+ 			
+ 		if (m8.find(0)) { //игровой компьютер
+ 	 		int num = 1;
+ 	 		int Newprice = price/3;
+ 	 		Memo.appendText("ChatBot: Возможно вам подойдут эти товары: \r\n");
+ 	 		//for (int i = 1; i<Newprice;i++) {
+ 			String query = "SELECT * FROM catalog WHERE Type LIKE 'Игровая' AND Category LIKE 'Видеокарта' AND Price <= '"+Newprice+"'";
+ 			String query2 = "SELECT * FROM catalog WHERE Type LIKE 'Игровой' AND Category LIKE 'Процессор' AND Price <= '"+Newprice+"'";
+ 			String query5 = "SELECT * FROM catalog WHERE Type LIKE 'Игровая' AND Category LIKE 'Материнская плата' AND Price <= '"+Newprice+"'";
+ 			Statement stmt;
+ 			Statement stmt2;
+ 			Statement stmt3;
+ 			Statement stmt4;
+ 			Statement stmt6;
+ 			System.out.println(Newprice);
+ 			try {
+ 				stmt = Conn.createStatement();
+ 				ResultSet rs = stmt.executeQuery(query);
+ 					while(rs.next()) {
+ 					if ((rs.getInt("Price") > maxVideo) && (rs.getInt("Price")<Newprice)) {
+ 						maxVideo = rs.getInt("Price");
+ 						System.out.println(maxVideo);
+ 						num++;
+ 				}
+ 					}
+ 			}catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 			try {
+ 				stmt6 = Conn.createStatement();
+ 				ResultSet rs6 = stmt6.executeQuery(query5);
+ 					while(rs6.next()) {
+ 					if ((rs6.getInt("Price") > maxMamka) && (rs6.getInt("Price")<Newprice)) {
+ 						maxMamka = rs6.getInt("Price");
+ 						System.out.println(maxMamka);
+ 						num++;
+ 				}
+ 					}
+ 			}catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 			try {
+ 				stmt2 = Conn.createStatement();
+ 				ResultSet rs2 = stmt2.executeQuery(query2);
+ 				
+ 				while(rs2.next()) {
+ 					if ((rs2.getInt("Price") > maxProc) && (rs2.getInt("Price")<Newprice)) {
+ 						maxProc = rs2.getInt("Price");
+ 						System.out.println(maxProc);
+ 					} 
+ 				}
+ 			} catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 			try {
+ 				String query3 = "SELECT * FROM catalog WHERE Type LIKE 'Игровой' AND Category LIKE 'Процессор' AND Price = '"+maxProc+"'";
+ 				stmt3 = Conn.createStatement();
+ 				ResultSet rs3 = stmt3.executeQuery(query3);
+ 					while(rs3.next()) { 						
+ 						System.out.println("New MaxProc: "+ maxProc);
+ 						linkProc = rs3.getString("Link");
+ 						Memo.appendText(rs3.getString("Name") + " его цена: " + maxProc + "\r\n");
+ 						num++;
+ 					}
+ 			} catch (SQLException e) {
+ 				e.printStackTrace();
+ 			}
+ 			Statement stmt5;
+ 			try {
+ 				String query6 = "SELECT * FROM catalog WHERE Type LIKE 'Игровая' AND Category LIKE 'Материнская плата' AND Price = '"+maxMamka+"'";
+ 				stmt5 = Conn.createStatement();
+ 				ResultSet rs5 = stmt5.executeQuery(query6);
+ 				while(rs5.next()) {
+ 					linkMamka = rs5.getString("Link");
+ 					Memo.appendText(rs5.getString("Name") + " его цена: " + rs5.getInt("Price") + "\r\n");
+ 					num++;
+ 				}
+ 			} catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 			try {
+ 				String query4 = "SELECT * FROM catalog WHERE Type LIKE 'Игровая' AND Category LIKE 'Видеокарта' AND Price = '"+maxVideo+"'";
+ 				stmt4 = Conn.createStatement();
+ 				ResultSet rs4 = stmt4.executeQuery(query4);
+ 					while(rs4.next()) { 						
+ 						System.out.println("New MaxVideo: "+ maxVideo);
+ 						linkVideo = rs4.getString("Link");
+ 						Memo.appendText( rs4.getString("Name") + " его цена: " + maxVideo + "\r\n");
+ 						num++;
+ 					}
+ 			} catch (SQLException e) {
+ 				e.printStackTrace();
+ 			}
+ 			Memo.appendText("У вас останется: "+ (price - (maxProc+maxVideo + maxMamka)));
+ 	 			}
+ 	 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 	if (m4.find(0)) { // игровая видеокарта
+ 		int num = 1;
+ 		Memo.appendText("ChatBot: Возможно вам подойдут эти товары: \r\n");
+ 		for (int i = 1; i<price;i++) {
+		String query = "SELECT * FROM catalog WHERE Type LIKE 'Игровая' AND Category LIKE 'Видеокарта' AND Price LIKE '"+i+"'";
+		Statement stmt;
+		try {
+			stmt = Conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				Memo.appendText(num +") " +rs.getString("Name") + " его цена: " + rs.getInt("Price") + "\r\n");
+				num++;
+				linkVideo = rs.getString("Link");
+				System.out.println(num +") " +rs.getString("Name") + " его цена: " + rs.getInt("Price") + "\r\n");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+ 			}
+ 		}
+ 	if (m6.find(0)) {
+ 		Memo.appendText("ChatBot: Возможно вам подойдут эти товары: ");
+ 		int num = 1;
+ 		for (int i = 1; i<price;i++) {
+		String query = "SELECT * FROM catalog WHERE Type LIKE 'Игровая' AND Category LIKE 'Видеокарта' AND Price LIKE '"+i+"'";
+		Statement stmt;
+		try {
+			stmt = Conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				Memo.appendText(num +") " +rs.getString("Name") + " его цена: " + rs.getInt("Price") + "\r\n");
+				num++;
+				linkVideo = rs.getString("Link");
+				System.out.println(num +") " +rs.getString("Name") + " его цена: " + rs.getInt("Price") + "\r\n");
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+ 			}
+ 		}
+	if (m9.find(0)) { // ссылки
+		if(linkProc != null) {
+		Memo.appendText("Ссылка на процессор: "+linkProc+ "\r\n");
+		} else {Memo.appendText("Вы не выбирали процессор \r\n");}
+		if (linkVideo != null) {
+		Memo.appendText("Ссылка на видеокарту: "+linkVideo + "\r\n");} else {
+			Memo.appendText("Вы не выбирали видеокарту \r\n");
+		}
+		if (linkMamka != null) {
+			Memo.appendText("Ссылка на видеокарту: "+linkMamka + "\r\n");} else {
+				Memo.appendText("Вы не выбирали видеокарту \r\n");
+			}
+	}
+	}
+ 
+	}
